@@ -26,7 +26,7 @@ class TransformCopyFlow(Flow):
         super().__init__()
 
     def run(self, nodes: Sequence[Node]) -> Sequence[Node]:
-        """Run CopyFlow.
+        """Run ExpandReduceFlow.
 
         Args:
             nodes (Sequence[Node]): Nodes to run.

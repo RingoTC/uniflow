@@ -223,6 +223,16 @@ class TransformCopyConfig(TransformConfig):
 
 
 @dataclass
+class TransformExpandReduceConfig(TransformConfig):
+    """Transform Expand Reduce Config Class."""
+
+    flow_name: str = "TransformExpandReduceFlow"
+    prompt_template: PromptTemplate = field(
+        default_factory=lambda: PromptTemplate(instruction="", few_shot_prompt=[])
+    )
+    model_config: ModelConfig = field(default_factory=lambda: {})
+
+@dataclass
 class TransformForGenerationOpenAIGPT3p5Config(TransformConfig):
     flow_name: str = "TransformOpenAIFlow"
     model_config: ModelConfig = field(

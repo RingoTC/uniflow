@@ -1,7 +1,6 @@
 """ Node module for uniflow."""
 from typing import Any, Mapping, Optional, Sequence
 
-
 class Node:
     """Node class for uniflow."""
 
