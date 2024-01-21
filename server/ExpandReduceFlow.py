@@ -93,8 +93,7 @@ async def expand_reduce_flow(
 
     # Insert a new record with 'processing' status
     db.execute('''
-        INSERT INTO jobs (job_id, input_data, output_data, status)
-        VALUES (?, ?, ?, ?)
+        INSERT INTO jobs (job_id, input_data, output_d]]]]]]]]]]]]
     ''', (job_id, str(job.input_data), None, 'processing'))
     db.commit()
 

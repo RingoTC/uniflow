@@ -31,7 +31,7 @@ class ExpandOp(Op):
         expand_1, expand_2 = self.expand_fn(value_dict)
         return {"expand_1": expand_1, "expand_2": expand_2}
 
-    def __call__(self, nodes: Sequence[Node]) -> List[Node]:
+    def __call__(self, nodes: Sequence[Node]) -> Sequence[Node]:
         """Call expand operation.
 
         Args:

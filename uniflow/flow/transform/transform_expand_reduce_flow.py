@@ -53,7 +53,6 @@ class TransformExpandReduceFlow(Flow):
             model_config: Dict[str, Any],
     ) -> None:  # pylint: disable=useless-parent-delegation
         """Initialize CopyFlow class."""
-        self._copy_op = CopyOp(name="copy_op")
         self._expand_op = ExpandOp(name="expand_op", expand_fn=expand_fn)
         self._reduce_op = ReduceOp(name="reduce_op", reduce_fn=reduce_fn)
         super().__init__()

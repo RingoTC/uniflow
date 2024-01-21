@@ -12,6 +12,8 @@ RUN poetry install --no-root
 
 RUN pip install -r requirements.txt
 
+RUN cd server
+
 EXPOSE 8080
 
-CMD ["python", "/app/cloud/hello.py"]
+CMD ["uvicorn", "server.ExpandReduceFlow:app", "--host", "0.0.0.0", "--port", "8080"]

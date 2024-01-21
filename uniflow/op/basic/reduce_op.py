@@ -21,7 +21,8 @@ class ReduceOp(Op):
         super().__init__(name="reduce")
         self.reduce_fn = reduce_fn
 
-    def _transform(self, expand_1_value_dict: Mapping[str, Any], expand_2_value_dict: Mapping[str, Any]) -> Mapping[str, Any]:
+    def _transform(self, expand_1_value_dict: Mapping[str, Any], expand_2_value_dict: Mapping[str, Any]) -> Mapping[
+        str, Any]:
         """Transform value dict.
 
         Args:
@@ -53,6 +54,7 @@ class ReduceOp(Op):
         """
 
         output_nodes = [
-            Node(name = self.unique_name(), value_dict=self._transform(nodes[0].value_dict, nodes[1].value_dict), prev_nodes=nodes)
+            Node(name=self.unique_name(), value_dict=self._transform(nodes[0].value_dict, nodes[1].value_dict),
+                 prev_nodes=nodes)
         ]
         return output_nodes
