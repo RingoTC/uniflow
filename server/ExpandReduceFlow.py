@@ -15,7 +15,6 @@ from uniflow.flow.config import TransformExpandReduceConfig
 
 app = FastAPI()
 
-
 """
 For simiplicity, we use SQLite as the database for storing the job status and result.
 However, SQLite is not suitable for high concurrency requirements. In my first design,
@@ -126,3 +125,21 @@ async def read_job_result(job_id: str, db: Connection = Depends(get_db)):
 
     status, output_data = result
     return JobResult(job_id=job_id, status=status, result=eval(output_data) if output_data else None)
+
+
+class AllJobStatus(BaseModel):
+    jobs: List[JobResult]
+
+
+@app.get("/all_job_status/")
+async def get_all_job_status(db: Connection = Depends(get_db)):
+    result = db.execute('''
+        SELECT job_id, status, output_data FROM jobs
+    ''').fetchall()
+
+    all_job_status = []
+    for job_id, status, output_data in result:
+        all_job_status.append(
+            JobResult(job_id=job_id, status=status, result=eval(output_data) if output_data else None))
+
+    return AllJobStatus(jobs=all_job_status)

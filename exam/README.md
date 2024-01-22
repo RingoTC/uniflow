@@ -47,57 +47,71 @@ The FastAPI Job Processing API is designed to handle job processing tasks asynch
 The API provides the following endpoints:
 
 1. **Submit a Job**:
-    - **Endpoint:** `POST /expand_reduce_flow/`
-    - **Description:** Submits a job for processing.
-    - **Request:**
-      ```json
-      {
-        "job": {
-          "input_data": [
-            {"key1": "value1"},
-            {"key2": "value2"},
-            ...
-          ]
-        }
-      }
-      ```
-    - **Response:**
-      ```json
-      {
-        "job_id": "unique_job_id"
-      }
-      ```
+   - **Endpoint:** `POST /expand_reduce_flow/`
+   - **Description:** Submits a job for processing.
+   - **Request:**
+     ```json
+     {
+       "job": {
+         "input_data": [
+           {"key1": "value1"},
+           {"key2": "value2"},
+           ...
+         ]
+       }
+     }
+     ```
+   - **Response:**
+     ```json
+     {
+       "job_id": "unique_job_id"
+     }
+     ```
 
 2. **Check Job Status**:
-    - **Endpoint:** `GET /check_status/{job_id}`
-    - **Description:** Checks the status of a submitted job.
-    - **Request:**
-        - Path parameter: `job_id` (string)
-    - **Response:**
-      ```json
-      {
-        "job_id": "unique_job_id",
-        "status": "job_status"
-      }
-      ```
+   - **Endpoint:** `GET /check_status/{job_id}`
+   - **Description:** Checks the status of a submitted job.
+   - **Request:**
+      - Path parameter: `job_id` (string)
+   - **Response:**
+     ```json
+     {
+       "job_id": "unique_job_id",
+       "status": "job_status"
+     }
+     ```
 
 3. **Retrieve Job Result**:
-    - **Endpoint:** `GET /job_result/{job_id}`
-    - **Description:** Retrieves the result of a completed job.
-    - **Request:**
-        - Path parameter: `job_id` (string)
-    - **Response:**
-      ```json
-      {
-        "job_id": "unique_job_id",
-        "status": "completed",
-        "result": [
-          {"key1": "value1"},
-          {"key2": "value2"},
-          ...
-        ]
-      }
-      ```
+   - **Endpoint:** `GET /job_result/{job_id}`
+   - **Description:** Retrieves the result of a completed job.
+   - **Request:**
+      - Path parameter: `job_id` (string)
+   - **Response:**
+     ```json
+     {
+       "job_id": "unique_job_id",
+       "status": "completed",
+       "result": [
+         {"key1": "value1"},
+         {"key2": "value2"},
+         ...
+       ]
+     }
+     ```
+
+4. **Get All Job Status**:
+   - **Endpoint:** `GET /all_job_status/`
+   - **Description:** Retrieves the status of all submitted jobs.
+   - **Response:**
+     ```json
+     {
+       "jobs": [
+         {"job_id": "id1", "status": "completed", "result": [...]},
+         {"job_id": "id2", "status": "processing", "result": null},
+         ...
+       ]
+     }
+     ```
 
 ## Database
 
@@ -111,46 +125,27 @@ The API uses SQLite as the database for storing job status and results. The data
 ## Job Processing Workflow
 
 1. **Job Submission:**
-    - A new job is submitted by making a `POST` request to `/expand_reduce_flow/`.
-    - The API generates a unique `job_id` for the job.
-    - The job is inserted into the database with a status of "processing."
+   - A new job is submitted by making a `POST` request to `/expand_reduce_flow/`.
+   - The API generates a unique `job_id` for the job.
+   - The job is inserted into the database with a status of "processing."
 
 2. **Asynchronous Processing:**
-    - An asynchronous task is started in the background using FastAPI's `BackgroundTasks`.
-    - The task executes the `run_expand_reduce_flow` function, which uses the Uniflow library for job execution.
-    - Upon completion, the job status is updated in the database.
+   - An asynchronous task is started in the background using FastAPI's `BackgroundTasks`.
+   - The task executes the `run_expand_reduce_flow` function, which uses the Uniflow library for job execution.
+   - Upon completion, the job status is updated in the database.
 
 3. **Checking Job Status:**
-    - The status of a job can be checked by making a `GET` request to `/check_status/{job_id}`.
-    - The response includes the job status.
+   - The status of a job can be checked by making a `GET` request to `/check_status/{job_id}`.
+   - The response includes the job status.
 
 4. **Retrieving Job Result:**
-    - The result of a completed job can be retrieved by making a `GET` request to `/job_result/{job_id}`.
-    - The response includes the job status and result data.
+   - The result of a completed job can be retrieved by making a `GET` request to `/job_result/{job_id}`.
+   - The response includes the job status and result data.
+
+5. **Getting All Job Status:**
+   - The status of all submitted jobs can be retrieved by making a `GET` request to `/all_job_status/`.
+   - The response includes a list of job statuses.
 
 ## Error Handling
 
 - If a job is not found (e.g., non-existent `job_id`), the API returns a `404 Not Found` error with a relevant error message.
-
-## Example Usage
-
-### Submit a Job
-
-```bash
-curl -X POST -H "Content-Type: application/json" -d '{"job": {"input_data": [{"key1": "value1"}, {"key2": "value2"}]}}' http://localhost:8000/expand_reduce_flow/
-
-### Check Job Status
-
-```bash
-curl http://localhost:8000/check_status/{job_id}
-```
-
-### Retrieve Job Result
-
-```bash
-curl http://localhost:8000/job_result/{job_id}
-```
-
-## Note
-The API uses SQLite for simplicity but is not suitable for high-concurrency requirements. The initial design considered using Redis as the job queue and PostgreSQL for storing job status and results.
-Feel free to use this documentation as a reference for interacting with the FastAPI Job Processing API.
